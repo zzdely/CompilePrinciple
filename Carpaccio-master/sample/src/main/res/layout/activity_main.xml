@@ -1,0 +1,55 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingLeft="10dp"
+    android:paddingRight="10dp">
+
+    <com.github.florent37.carpaccio.Carpaccio
+        android:id="@+id/carpaccio"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:register="
+            com.github.florent37.carpaccio.controllers.CommonViewController;
+        ">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:tag="clickStartActivity(.MainActivitySample)"
+                android:text="Sample" />
+
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:tag="clickStartActivity(.ActivityImageView)"
+                android:text="ImageView sample" />
+
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:tag="clickStartActivity(.MainActivityParallax)"
+                android:text="Parallax" />
+
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:tag="clickStartActivity(.MainActivityRecycler)"
+                android:text="Recycler + Bind" />
+
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:tag="clickStartActivity(.MainActivityRecyclerRetrofit)"
+                android:text="RecyclerRetrofit" />
+
+        </LinearLayout>
+
+    </com.github.florent37.carpaccio.Carpaccio>
+
+</RelativeLayout>

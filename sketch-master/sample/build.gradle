@@ -1,0 +1,138 @@
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath 'com.neenbedankt.gradle.plugins:android-apt:1.8'
+    }
+}
+
+apply plugin: 'com.android.application'
+apply plugin: 'com.neenbedankt.android-apt'
+
+Properties localProperties = openProperties("local.properties")
+String jksFileName = localProperties.getProperty("sample.storeFile")
+File jksFile = jksFileName != null && "" != jksFileName.trim() ? file(jksFileName) : null
+
+android {
+    compileSdkVersion COMPILE_SDK_VERSION.toInteger()
+    buildToolsVersion "${BUILD_TOOLS_VERSION}"
+
+    defaultConfig {
+        applicationId "me.xiaopan.sketchsample"
+        minSdkVersion MIN_SDK_VERSION.toInteger()
+        targetSdkVersion TARGET_SDK_VERSION.toInteger()
+        versionCode VERSION_CODE.toInteger()
+        versionName "${VERSION_NAME}"
+
+        ndk {
+            abiFilters 'armeabi'
+        }
+    }
+
+    signingConfigs {
+        release {
+            storeFile jksFile
+            storePassword localProperties.getProperty('sample.storePassword')
+            keyAlias localProperties.getProperty('sample.keyAlias')
+            keyPassword localProperties.getProperty('sample.keyPassword')
+        }
+    }
+
+    buildTypes {
+        debug {
+            signingConfig jksFile != null && jksFile.exists() ? signingConfigs.release : signingConfig
+        }
+
+        release {
+            minifyEnabled true
+            shrinkResources true
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.release
+        }
+    }
+
+    productFlavors {
+        normal {
+
+        }
+
+        normalX86 {
+            ndk {
+                abiFilters "x86"
+            }
+        }
+
+        // 为了测试没有导入sketch-gif时是否可以正常运行
+        nogiflib {
+        }
+
+        // 为了测试没有导入sketch-gif时是否可以正常运行
+        nogiflibX86 {
+            ndk {
+                abiFilters "x86"
+            }
+        }
+    }
+
+    lintOptions {
+        abortOnError false
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_7
+        targetCompatibility JavaVersion.VERSION_1_7
+    }
+
+    aaptOptions {
+        noCompress "bmp"
+    }
+}
+
+dependencies {
+    compile fileTree(dir: 'libs', include: ['*.jar'])
+
+    compile "com.android.support:appcompat-v7:${ANDROID_SUPPORT_LIBRARY_VERSION}"
+    compile "com.android.support:recyclerview-v7:${ANDROID_SUPPORT_LIBRARY_VERSION}"
+
+    compile 'me.xiaopan:pagerslidingtabstrip:1.6.0'
+    compile 'me.xiaopan:assemblyadapter:2.3.0'
+
+    compile project(':sketch')
+    normalCompile project(':sketch-gif')
+
+    // ButterKnifeView
+    compile 'com.jakewharton:butterknife:8.4.0'
+    apt 'com.jakewharton:butterknife-compiler:8.4.0'
+
+    // LeakCanary
+    debugCompile 'com.squareup.leakcanary:leakcanary-android:1.5'
+    releaseCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.5'
+    testCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.5'
+
+    compile 'org.greenrobot:eventbus:3.0.0'
+
+    compile 'com.squareup.retrofit2:retrofit:2.3.0'
+    compile 'com.squareup.retrofit2:converter-gson:2.3.0'
+
+    compile 'com.github.wseemann:FFmpegMediaMetadataRetriever:1.0.14'
+}
+
+repositories {
+    flatDir {
+        dirs 'libs'
+    }
+    mavenCentral()
+}
+
+def Properties openProperties(String fileName) {
+    File propertiesFile = new File(projectDir, fileName)
+    if (!propertiesFile.exists()) {
+        return new Properties()
+    }
+    FileInputStream inputStream = new FileInputStream(propertiesFile)
+    Properties properties = new Properties()
+    properties.load(inputStream)
+    inputStream.close()
+    return properties
+}

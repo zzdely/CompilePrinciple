@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.github.florent37.carpaccio.Carpaccio xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="200dp"
+    android:clipToPadding="true"
+    app:onlyForPreview="true"
+    app:register="
+            com.github.florent37.carpaccio.controllers.CommonViewController;
+            com.github.florent37.carpaccio.controllers.ImageViewController;
+            com.github.florent37.carpaccio.controllers.TextViewController;
+            com.github.florent37.carpaccio.controllers.ParallaxViewController;
+        ">
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:tag="
+            parallaxY(0.5);
+        ">
+
+        <ImageView
+            android:id="@+id/image_episode"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="centerCrop"
+            android:tag="
+                enablePreview();
+                previewUrl(http://lorempixel.com/700/400/);
+                url($userHeader.image);
+            " />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:background="#A333"
+            android:padding="10dp"
+            android:tag="
+                setText($userHeader.name);
+                font(Roboto-Black.ttf);"
+            android:textColor="@android:color/white"
+            android:textSize="20sp" />
+    </FrameLayout>
+
+</com.github.florent37.carpaccio.Carpaccio>
